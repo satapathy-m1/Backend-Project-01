@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { registerUser, loginUser, logoutUser, refreshAccessToken } from "../controllers/user.controller.js";
+import { registerUser, loginUser, logoutUser, refreshAccessToken,changeCurrentPassword, getCurrentUser } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js"
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -33,6 +33,14 @@ router.route("/logout").post(
 
 router.route("/refresh-token").post(
     refreshAccessToken
+)
+
+router.route("/updatePassword").post(
+    changeCurrentPassword
+)
+router.route("/getUser").get(
+    verifyJWT,
+    getCurrentUser
 )
 //upper line is same as router.post("/register", registerUser) but it uses chaining read about it more on the internet
 export default router;

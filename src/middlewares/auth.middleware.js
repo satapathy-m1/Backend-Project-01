@@ -18,13 +18,13 @@ export const verifyJWT = asyncHandler( async (req, _, next) => {
         const decodedToken = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET)
         //console.log("Decoded token:- ", decodedToken);
         
-        const userToLogOut = await User.findById(decodedToken?._id).select("-password -refreshToken");
+        const user = await User.findById(decodedToken?._id).select("-password -refreshToken");
         
-        if(!userToLogOut) {
+        if(!user) {
             throw new ApiError(400, "Invalid token ");
         }
 
-        req.userToLogOut = userToLogOut;
+        req.user = user;
         next();
     } catch (error) {
         throw new ApiError(400, "Error in fetching user tokens"
