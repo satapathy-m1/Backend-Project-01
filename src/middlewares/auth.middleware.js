@@ -1,4 +1,4 @@
-import { ApiError } from "../utils/ApiError";
+import { ApiError } from "../utils/ApiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 import jwt from "jsonwebtoken";
@@ -13,10 +13,12 @@ export const verifyJWT = asyncHandler( async (req, _, next) => {
         if(!accessToken) {
             throw new ApiError(400, "Unauthorized Request ")
         }
-
+        //console.log("Access token:- ", accessToken);
+        
         const decodedToken = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET)
-
-        const userToLogOut = await User.findOne(decodedToken._id).select("-password -refreshToken");
+        //console.log("Decoded token:- ", decodedToken);
+        
+        const userToLogOut = await User.findById(decodedToken?._id).select("-password -refreshToken");
         
         if(!userToLogOut) {
             throw new ApiError(400, "Invalid token ");
